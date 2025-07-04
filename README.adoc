@@ -1,0 +1,20 @@
+= Building GraphRAG Python MCP tools
+:course-link: https://graphacademy.neo4j.com/courses/genai-mcp-build-custom-tools-python
+
+This repository supports the link:{course-link}/[Building GraphRAG Python MCP tools^] course on GraphAcademy.
+
+The course challenges you to do the following:
+
+1. link:{course-link}/1-building-servers/2c-creating-a-server/[Build an MCP Server using MCP Python SDK.^].
+
+2. link:{course-link}/1-building-servers/5c-testing-server/[Run the MCP Inspector and inspect your MCP Server].
+
+3. link:{course-link}/1-building-servers/[Build a tool that connects to Neo4j].
+
+4. link:{course-link}/1-building-servers/[Expose a Label and Property combination as a Resource].
+
+5. link:{course-link}/1-building-servers/[Create a prompt template to help an MCP Host perform text-to-cypher].
+
+6. link:{course-link}/1-building-servers/[Use tools to build novel tools for your MCP server].
+
+**link:{course-link}/[Enroll now^]**

@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "Strawbrerry": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "server",
+        "run",
+        "main.py"
+      ]
+    }
+  }
+}
