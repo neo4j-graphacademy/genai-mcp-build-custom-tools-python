@@ -1,0 +1,14 @@
+/* tag::opening[] */
+{
+  "servers": {
+    /* end::opening[] */
+    /* tag::strawberry[] */
+    "strawberry": {
+      "type": "http",
+      "url": "http://localhost:8000/mcp"
+    }
+    /* end::strawberry[] */
+    /* tag::closing[] */
+  }
+}
+/* end::closing[] */
