@@ -18,3 +18,33 @@ The course challenges you to do the following:
 6. link:{course-link}/1-building-servers/[Use tools to build novel tools for your MCP server].
 
 **link:{course-link}/[Enroll now^]**
+
+== Running the Interactive MCP Client
+
+This repository includes a Python MCP client for testing your server.
+
+.Start the MCP Server
+[source,bash]
+----
+cd solutions/server
+uv run main.py
+----
+
+.Run the Interactive Client (in a separate terminal)
+[source,bash]
+----
+cd client
+uv venv
+source .venv/bin/activate
+uv pip install -e .
+python main.py
+----
+
+The client provides an interactive menu to:
+
+* List available tools
+* Select and execute tools
+* Provide parameters based on tool schemas
+* View results
+
+Select a tool by number, provide any required parameters, and press `0` or `q` to exit.
