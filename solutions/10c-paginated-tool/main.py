@@ -235,13 +235,9 @@ async def list_movies_by_genre(
     """
     # end::list_movies_by_genre_def[]
 
-
     # tag::list_movies_by_genre_cursor[]
     # Calculate skip value from cursor
     skip = cursor * page_size
-
-    # Access driver from lifespan context
-    driver = ctx.request_context.lifespan_context.driver
 
     # Log the request
     page_num = (skip // page_size) + 1
@@ -250,6 +246,9 @@ async def list_movies_by_genre(
 
     # tag::list_movies_by_genre_execute[]
     try:
+        # Access driver from lifespan context
+        driver = ctx.request_context.lifespan_context.driver
+
         # Execute paginated query
         records, summary, keys = await driver.execute_query(
             """
@@ -257,7 +256,7 @@ async def list_movies_by_genre(
             RETURN m.title AS title,
                    m.released AS released,
                    m.imdbRating AS rating
-            ORDER BY m.imdbRating DESC, m.title ASC
+            ORDER BY m.title ASC
             SKIP $skip
             LIMIT $limit
             """,
@@ -265,12 +264,12 @@ async def list_movies_by_genre(
             skip=skip,
             limit=page_size
         )
-        # end::list_movies_by_genre_execute[]
 
-        # tag::list_movies_by_genre_convert[]
         # Convert to list of dictionaries
         movies = [record.data() for record in records]
+        # end::list_movies_by_genre_execute[]
 
+        # tag::list_movies_by_genre_return[]
         # Calculate next cursor
         next_cursor = None
         if len(movies) == page_size:
@@ -288,14 +287,13 @@ async def list_movies_by_genre(
             "next_cursor": next_cursor,
             "page": page_num,
             "page_size": page_size,
-            "has_more": next_cursor is not None,
-            "count": len(movies)
+            "has_more": next_cursor is not None
         }
 
     except Exception as e:
         await ctx.error(f"Query failed: {str(e)}")
         raise
-    # end::list_movies_by_genre_convert[]
+    # end::list_movies_by_genre_return[]
 # end::list_movies_by_genre[]
 
 # tag::main[]
