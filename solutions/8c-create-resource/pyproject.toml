@@ -1,0 +1,11 @@
+[project]
+name = "2c-add-neo4j-connection"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp>=1.18.0",
+    "neo4j>=6.0.2",
+    "python-dotenv>=1.1.1",
+]

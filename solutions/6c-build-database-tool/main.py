@@ -73,6 +73,64 @@ async def graph_statistics(ctx: Context) -> dict[str, int]:
     return {"nodes": 0, "relationships": 0}
 # end::graph_statistics[]
 
+# tag::get_movies_by_genre[]
+from mcp.server.fastmcp import Context
+
+@mcp.tool()
+async def get_movies_by_genre(genre: str, limit: int = 10, ctx: Context = None) -> list[dict]:
+    """
+    Get movies by genre from the Neo4j database.
+
+    Args:
+        genre: The genre to search for (e.g., "Action", "Drama", "Comedy")
+        limit: Maximum number of movies to return (default: 10)
+        ctx: Context object (injected automatically)
+
+    Returns:
+        List of movies with title, tagline, and release year
+    """
+
+    # Log the request
+    await ctx.info(f"Searching for {genre} movies (limit: {limit})...")
+
+    # Access the Neo4j driver from lifespan context
+    driver = ctx.request_context.lifespan_context.driver
+
+    # Log the query execution
+    await ctx.debug(f"Executing Cypher query for genre: {genre}")
+
+    try:
+        # Execute the query
+        records, summary, keys = await driver.execute_query(
+            """
+            MATCH (m:Movie)-[:IN_GENRE]->(g:Genre {name: $genre})
+            RETURN m.title AS title,
+                   m.imdbRating AS imdbRating,
+                   m.released AS released
+            ORDER BY coalesce(m.imdbRating, 0) DESC
+            LIMIT $limit
+            """,
+            genre=genre,
+            limit=limit
+        )
+
+        # Convert records to list of dictionaries
+        movies = [record.data() for record in records]
+
+        # Log the result
+        await ctx.info(f"Found {len(movies)} {genre} movies")
+
+        if len(movies) == 0:
+            await ctx.warning(f"No movies found for genre: {genre}")
+
+        return movies
+
+    except Exception as e:
+        # Log any errors
+        await ctx.error(f"Query failed: {str(e)}")
+        raise
+# end::get_movies_by_genre[]
+
 # tag::main[]
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
