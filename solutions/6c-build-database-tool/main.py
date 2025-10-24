@@ -74,8 +74,6 @@ async def graph_statistics(ctx: Context) -> dict[str, int]:
 # end::graph_statistics[]
 
 # tag::get_movies_by_genre[]
-from mcp.server.fastmcp import Context
-
 @mcp.tool()
 async def get_movies_by_genre(genre: str, limit: int = 10, ctx: Context = None) -> list[dict]:
     """
