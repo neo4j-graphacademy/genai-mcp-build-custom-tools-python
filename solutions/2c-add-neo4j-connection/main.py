@@ -63,7 +63,7 @@ async def graph_statistics(ctx: Context) -> dict[str, int]:
 
     # Use the driver to query Neo4j with the correct database
     records, summary, keys = await driver.execute_query(
-        r"RETURN COUNT {()} AS nodes, COUNT {()-[]-()} AS relationships",
+        r"RETURN COUNT {()} AS nodes, COUNT {()-[]->()} AS relationships",
         database_=database
     )
 
