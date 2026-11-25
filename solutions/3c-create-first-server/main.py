@@ -1,7 +1,7 @@
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 # Create an MCP server
-mcp = FastMCP("Strawbrerry")
+mcp = MCPServer("Strawberry")
 
 @mcp.tool()
 def count_letters(text: str, search: str) -> int:

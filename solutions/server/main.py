@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
 from neo4j import AsyncGraphDatabase, AsyncDriver
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -19,7 +19,7 @@ class AppContext:
 
 
 @asynccontextmanager
-async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
+async def app_lifespan(server: MCPServer) -> AsyncIterator[AppContext]:
     """Manage Neo4j driver lifecycle."""
 
     # Read connection details from environment
@@ -41,9 +41,9 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
 
 
 # Create server with lifespan
-mcp = FastMCP("Movies GraphRAG Server", lifespan=app_lifespan)
+mcp = MCPServer("Movies GraphRAG Server", lifespan=app_lifespan)
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 
 @mcp.tool()
 async def graph_statistics(ctx: Context) -> dict[str, int]:
