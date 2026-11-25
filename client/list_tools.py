@@ -6,14 +6,14 @@ Usage: python list_tools.py [server_url]
 import asyncio
 import sys
 from mcp import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.streamable_http import streamable_http_client
 
 
 async def list_tools(server_url: str = "http://localhost:8000/mcp"):
     """List all tools from an MCP server."""
     print(f"Connecting to: {server_url}")
     
-    async with streamablehttp_client(server_url) as (read, write, get_session_id):
+    async with streamable_http_client(server_url) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             

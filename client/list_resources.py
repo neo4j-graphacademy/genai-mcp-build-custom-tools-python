@@ -6,14 +6,14 @@ Usage: python list_resources.py [server_url]
 import asyncio
 import sys
 from mcp import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.streamable_http import streamable_http_client
 
 
 async def list_resources(server_url: str = "http://localhost:8000/mcp"):
     """List all resources from an MCP server."""
     print(f"Connecting to: {server_url}")
     
-    async with streamablehttp_client(server_url) as (read, write, get_session_id):
+    async with streamable_http_client(server_url) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             
@@ -30,10 +30,10 @@ async def list_resources(server_url: str = "http://localhost:8000/mcp"):
             # List resource templates (parametrized resources)
             templates = await session.list_resource_templates()
             
-            print(f"\n📋 Found {len(templates.resourceTemplates)} resource template(s):\n")
-            for template in templates.resourceTemplates:
+            print(f"\n📋 Found {len(templates.resource_templates)} resource template(s):\n")
+            for template in templates.resource_templates:
                 print(f"• {template.name}")
-                print(f"  URI Template: {template.uriTemplate}")
+                print(f"  URI Template: {template.uri_template}")
                 if template.description:
                     print(f"  {template.description}")
 

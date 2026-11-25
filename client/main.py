@@ -7,7 +7,7 @@ import json
 import re
 from typing import Any, Dict
 from mcp import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.streamable_http import streamable_http_client
 
 
 def build_arguments_from_schema(input_schema: Dict[str, Any]) -> Dict[str, Any]:
@@ -79,8 +79,8 @@ async def interactive_tool_client():
     print(f"🔌 Connecting to MCP server at {server_url}...\n")
     
     try:
-        async with streamablehttp_client(server_url) as (read, write, get_session_id):
-            print(f"✅ Connected! Session ID: {get_session_id()}\n")
+        async with streamable_http_client(server_url) as (read, write):
+            print("✅ Connected!\n")
 
             async with ClientSession(read, write) as session:
                 await session.initialize()
@@ -102,7 +102,7 @@ async def interactive_tool_client():
                     resources = resources_result.resources
                     
                     templates_result = await session.list_resource_templates()
-                    templates = templates_result.resourceTemplates
+                    templates = templates_result.resource_templates
                     
                     if not tools and not resources and not templates:
                         print("❌ No tools or resources available on the server.")
@@ -139,7 +139,7 @@ async def interactive_tool_client():
                     if templates:
                         for i, template in enumerate(templates, len(tools) + len(resources) + 1):
                             print(f"\n{i}. {template.name}")
-                            print(f"   URI Template: {template.uriTemplate}")
+                            print(f"   URI Template: {template.uri_template}")
                             if template.description:
                                 print(f"   {template.description}")
                     else:
@@ -172,7 +172,7 @@ async def interactive_tool_client():
                             print("=" * 60)
                             
                             # Build arguments from input schema
-                            input_schema = selected_tool.inputSchema
+                            input_schema = selected_tool.input_schema
                             arguments = build_arguments_from_schema(input_schema)
                             
                             print(f"\n⚙️  Calling {selected_tool.name} with arguments:")
@@ -195,7 +195,7 @@ async def interactive_tool_client():
                             else:
                                 print("(No content returned)")
                             
-                            if result.isError:
+                            if result.is_error:
                                 print("\n⚠️  Tool returned an error")
                             
                             print("-" * 60)
@@ -235,10 +235,10 @@ async def interactive_tool_client():
                             
                             print(f"\n📋 Reading resource template: {selected_template.name}")
                             print("=" * 60)
-                            print(f"URI Template: {selected_template.uriTemplate}")
+                            print(f"URI Template: {selected_template.uri_template}")
                             
                             # Extract parameters from URI template
-                            params = re.findall(r'{(\w+)}', selected_template.uriTemplate)
+                            params = re.findall(r'{(\w+)}', selected_template.uri_template)
                             
                             # Prompt for parameter values
                             param_values = {}
@@ -256,7 +256,7 @@ async def interactive_tool_client():
                                 continue
                             
                             # Construct the URI from the template
-                            uri = selected_template.uriTemplate
+                            uri = selected_template.uri_template
                             for param, value in param_values.items():
                                 uri = uri.replace(f'{{{param}}}', value)
                             
